@@ -1,0 +1,200 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "lunch_with_colleague_n4",
+      "title_vi": "Đi ăn trưa với đồng nghiệp",
+      "level": "N4",
+      "setting": "Sắp đến giờ nghỉ trưa tại một công ty Nhật",
+      "user_role": {
+        "identity": "Nhân viên người Việt mới vào công ty Nhật",
+        "relationship": "Đồng nghiệp cùng phòng với nhân vật AI",
+        "goals": [
+          "Rủ đồng nghiệp đi ăn trưa",
+          "Hỏi đồng nghiệp muốn ăn món gì",
+          "Thống nhất địa điểm và thời gian quay lại công ty"
+        ],
+        "known_information": [
+          "Gần công ty có quán sushi và quán ramen",
+          "Giờ nghỉ trưa bắt đầu lúc 12 giờ"
+        ]
+      },
+      "ai_role": {
+        "identity": "Đồng nghiệp người Nhật làm cùng phòng",
+        "relationship": "Đồng nghiệp đã làm ở công ty lâu hơn người học",
+        "personality": "Thân thiện, tự nhiên và hơi bận",
+        "goals": [
+          "Để người học chủ động đưa ra lời mời",
+          "Hỏi lại sở thích của người học",
+          "Cùng người học đi đến một quyết định cụ thể"
+        ],
+        "hidden_information": [
+          "Không ăn được đồ sống",
+          "Chỉ có 45 phút nghỉ trưa"
+        ]
+      },
+      "language_targets": [
+        "〜ませんか",
+        "〜たいです",
+        "〜てもいいですか",
+        "〜ので"
+      ],
+      "hidden_events": [
+        "Quán được chọn đầu tiên đã hết chỗ",
+        "Đồng nghiệp nhớ ra có cuộc họp lúc 12 giờ 45"
+      ],
+      "success_conditions": [
+        "Hai người chọn được địa điểm ăn",
+        "Hai người thống nhất thời gian",
+        "Người học hỏi được sở thích hoặc hạn chế ăn uống của đồng nghiệp"
+      ]
+    },
+    {
+      "scenario_id": "supermarket_n5",
+      "title_vi": "Mua đồ ở siêu thị",
+      "level": "N5",
+      "setting": "Người học đang tìm đồ và thanh toán tại một siêu thị ở Nhật",
+      "user_role": {
+        "identity": "Khách hàng người Việt mới sống ở Nhật",
+        "relationship": "Khách hàng đang hỏi nhân viên siêu thị",
+        "goals": [
+          "Hỏi vị trí của một món hàng",
+          "Hỏi giá hoặc chọn số lượng",
+          "Hoàn thành thanh toán"
+        ],
+        "known_information": [
+          "Bạn cần mua sữa, trứng và một túi gạo",
+          "Bạn muốn thanh toán bằng thẻ"
+        ]
+      },
+      "ai_role": {
+        "identity": "Nhân viên siêu thị người Nhật",
+        "relationship": "Nhân viên đang hỗ trợ khách hàng",
+        "personality": "Lịch sự, nói chậm và rõ",
+        "goals": [
+          "Chỉ dẫn vị trí hàng hóa bằng câu ngắn",
+          "Hỏi số lượng khi phù hợp",
+          "Thực hiện hội thoại tại quầy thanh toán"
+        ],
+        "hidden_information": [
+          "Loại sữa ít béo đã hết",
+          "Siêu thị đang giảm giá gạo túi 5 kg"
+        ]
+      },
+      "language_targets": [
+        "〜はどこですか",
+        "いくらですか",
+        "〜をください",
+        "カードでお願いします"
+      ],
+      "hidden_events": [
+        "Một mặt hàng người học cần mua đã hết",
+        "Nhân viên hỏi người học có túi mua hàng hay không"
+      ],
+      "success_conditions": [
+        "Người học tìm được ít nhất hai món",
+        "Người học phản hồi khi một món đã hết",
+        "Người học chọn được phương thức thanh toán"
+      ]
+    },
+    {
+      "scenario_id": "job_interview_n3",
+      "title_vi": "Phỏng vấn xin việc",
+      "level": "N3",
+      "setting": "Vòng phỏng vấn đầu tiên cho vị trí kỹ sư phần mềm tại công ty Nhật",
+      "user_role": {
+        "identity": "Ứng viên kỹ sư phần mềm người Việt",
+        "relationship": "Ứng viên đang trao đổi với nhà tuyển dụng",
+        "goals": [
+          "Tự giới thiệu ngắn gọn",
+          "Trình bày kinh nghiệm và thế mạnh",
+          "Giải thích lý do muốn vào công ty",
+          "Đặt ít nhất một câu hỏi cho nhà tuyển dụng"
+        ],
+        "known_information": [
+          "Vị trí sử dụng Python và các hệ thống AI",
+          "Công ty làm việc từ thứ Hai đến thứ Sáu"
+        ]
+      },
+      "ai_role": {
+        "identity": "Nhà tuyển dụng người Nhật",
+        "relationship": "Người phỏng vấn ứng viên",
+        "personality": "Chuyên nghiệp, thân thiện nhưng hỏi kỹ",
+        "goals": [
+          "Hỏi lần lượt về bản thân, kinh nghiệm và động lực",
+          "Đặt một câu hỏi đào sâu dựa trên câu trả lời thật của ứng viên",
+          "Cho ứng viên cơ hội đặt câu hỏi"
+        ],
+        "hidden_information": [
+          "Nhóm đang cần người có thể giải thích kỹ thuật rõ ràng",
+          "Nhà tuyển dụng quan tâm cách ứng viên xử lý lỗi production"
+        ]
+      },
+      "language_targets": [
+        "〜と申します",
+        "〜た経験があります",
+        "〜を担当しておりました",
+        "志望した理由は〜です"
+      ],
+      "hidden_events": [
+        "Nhà tuyển dụng yêu cầu kể về một lần xử lý sự cố",
+        "Nhà tuyển dụng hỏi về mục tiêu nghề nghiệp ba năm tới"
+      ],
+      "success_conditions": [
+        "Người học tự giới thiệu được",
+        "Người học đưa ra ít nhất một ví dụ kinh nghiệm cụ thể",
+        "Người học giải thích được động lực ứng tuyển",
+        "Người học đặt được một câu hỏi phù hợp"
+      ]
+    },
+    {
+      "scenario_id": "gas_station_n4",
+      "title_vi": "Đổ xăng tại Nhật",
+      "level": "N4",
+      "setting": "Người học lái xe thuê vào một cây xăng có nhân viên phục vụ",
+      "user_role": {
+        "identity": "Khách du lịch người Việt đang lái xe thuê",
+        "relationship": "Khách hàng nói chuyện với nhân viên cây xăng",
+        "goals": [
+          "Nói đúng loại xăng cần đổ",
+          "Yêu cầu đổ đầy bình hoặc nói số tiền",
+          "Chọn phương thức thanh toán"
+        ],
+        "known_information": [
+          "Xe dùng xăng regular",
+          "Nắp bình xăng ở phía bên trái",
+          "Bạn muốn thanh toán bằng tiền mặt"
+        ]
+      },
+      "ai_role": {
+        "identity": "Nhân viên cây xăng người Nhật",
+        "relationship": "Nhân viên đang phục vụ khách hàng",
+        "personality": "Nhanh nhẹn, lịch sự và xác nhận thông tin cẩn thận",
+        "goals": [
+          "Xác nhận loại xăng và số lượng",
+          "Hỏi phương thức thanh toán",
+          "Chỉ dẫn vị trí dừng xe khi cần"
+        ],
+        "hidden_information": [
+          "Máy thanh toán thẻ đang bảo trì",
+          "Cây xăng đang tặng khăn giấy cho khách đổ đầy bình"
+        ]
+      },
+      "language_targets": [
+        "レギュラーでお願いします",
+        "満タンにしてください",
+        "現金で払います",
+        "〜てもらえますか"
+      ],
+      "hidden_events": [
+        "Nhân viên hỏi lại vì nghe chưa rõ loại xăng",
+        "Nhân viên thông báo máy thanh toán thẻ đang bảo trì"
+      ],
+      "success_conditions": [
+        "Người học xác nhận đúng xăng regular",
+        "Người học nói rõ số lượng hoặc yêu cầu đầy bình",
+        "Người học hoàn thành thanh toán"
+      ]
+    }
+  ]
+}
+

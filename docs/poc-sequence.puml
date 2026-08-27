@@ -1,0 +1,119 @@
+@startuml
+title Kaiwa Voice Agent PoC v0.1 — realtime + delayed coaching
+
+autonumber
+hide footbox
+skinparam ParticipantPadding 16
+skinparam BoxPadding 8
+skinparam SequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+actor "Người học\n(Human User)" as U
+boundary "Pipecat Web Client\n/browser" as WEB
+
+box "Pipecat realtime process"
+  control "SmallWebRTC\nTransport" as RTC
+  control "Silero VAD +\nTurn Aggregator" as TURN
+  participant "Soniox STT\nstt-rt-v5" as STT
+  control "User Turn\nRecorder" as UR
+  participant "Kaiwa + Scenario LLM\nOpenAI-compatible" as LLM
+  control "Assistant Turn\nRecorder" as AR
+  participant "Soniox TTS\ntts-rt-v2" as TTS
+end box
+
+collections "Scenario Catalog\npublic/private role data" as CAT
+database "SQLite\nsession, turns, report, profile" as DB
+participant "Language Coach LLM\nbackground after disconnect" as COACH
+
+note over U,CAT
+Human User is an actor, not another LLM agent.
+User Role Card contains only public information.
+AI hidden facts/events never go to the user card.
+end note
+
+== 1. Initialize the session ==
+
+LLM -> CAT: load(scenarioId from environment)
+CAT --> LLM: ScenarioSpec(user role, AI role,\nhidden facts/events, success conditions)
+LLM -> DB: read LearnerProfile(userId)
+DB --> LLM: level, completed sessions, recurring issues
+LLM -> DB: create active Session(sessionId)
+
+U -> WEB: Open /client and allow microphone
+WEB -> RTC: WebRTC offer + audio track
+RTC --> WEB: WebRTC answer + bot audio track
+
+LLM -> LLM: Build private system prompt from\nScenarioSpec + LearnerProfile
+LLM -> TTS: Opening Japanese turn
+TTS -> RTC: PCM audio chunks
+RTC -> WEB: Stream opening audio
+WEB -> U: AI opens the role-play naturally
+
+== 2. Realtime conversation loop ==
+
+loop Until the learner disconnects
+  U -> WEB: Speak Japanese
+  WEB -> RTC: Stream microphone audio
+  RTC -> TURN: PCM audio frames
+
+  alt Learner speaks while bot audio is playing
+    TURN -> TTS: InterruptionFrame / cancel pending audio
+    TURN -> LLM: Cancel the interrupted response
+    AR -> AR: Discard incomplete assistant buffer
+  end
+
+  TURN -> STT: Speech frames + local endpoint
+  STT --> WEB: Interim transcript frames
+  STT --> UR: Final TranscriptionFrame
+  UR -> UR: Keep final only; deduplicate
+  UR -> TURN: Forward transcript
+  TURN -> LLM: Context + final learner transcript
+
+  LLM -> LLM: Stay in AI role, respect N-level,\nuse hidden event only when natural
+  LLM --> AR: LLM response start + text chunks + end
+  AR -> AR: Buffer only complete LLM response
+  AR -> TTS: Forward Japanese text chunks
+  TTS -> RTC: Stream synthesized PCM
+  RTC -> WEB: Bot audio
+  WEB -> U: Hear the AI character
+  AR -> DB: Turn remains in in-memory session\nuntil finalization
+end
+
+== 3. Finalize and coach ==
+
+U -> WEB: Disconnect / finish practice
+WEB -> RTC: Close peer connection
+RTC -> LLM: on_client_disconnected
+LLM -> AR: Discard any incomplete response
+LLM -> DB: Save final transcript; state=completed
+
+LLM -> COACH: scenario + transcript evidence
+note right of COACH
+Coach is a separate context.
+It may assess grammar, vocabulary,
+politeness, naturalness and task completion.
+It must not score pronunciation because
+PoC v0.1 has no acoustic metrics.
+end note
+
+alt Coach returns valid JSON
+  COACH --> LLM: SessionReport JSON
+else Coach/API fails
+  LLM -> LLM: Create safe rule-based fallback report
+end
+
+LLM -> DB: Save report
+LLM -> DB: Update completed_sessions + recurring issues
+U -> DB: Run report CLI
+DB --> U: Latest Vietnamese feedback JSON
+
+== 4. Deferred to phase 2 ==
+
+note over STT,COACH
+Not in the realtime critical path:
+turn audio -> second-pass ASR -> final transcript
+-> forced alignment -> acoustic metrics -> pronunciation feedback.
+end note
+
+@enduml
+
